@@ -117,3 +117,72 @@ For questions or contributions, please contact:
 - Email: ghoshayush877@gmail.com
 
 ---
+
+
+# 🎮 Tic-Tac-Toe AI with Pygame
+An unbeatable Tic-Tac-Toe implementation featuring:
+- Minimax algorithm with Alpha-Beta pruning
+- Interactive Pygame GUI
+- Human vs AI gameplay
+
+## 📦 Installation
+
+1. Clone the repository:
+   bash
+   git clone https://github.com/ayush-ghosh-7/Codesoft.git
+   cd Codesoft
+   
+
+2. Install dependencies:
+   bash
+   pip install pygame
+   
+
+## 🚀 How to Play
+
+Run the game:
+bash
+python tic_tac_toe_frontend.py
+
+
+Click on any square to place your 'X'
+The AI will automatically respond with 'O'
+Press 'R' to restart the game at any time
+
+## 🧠 AI Implementation
+
+The AI uses:
+Minimax algorithm - Evaluates all possible moves
+Alpha-Beta pruning - Optimizes the search process
+Depth-first search - Looks ahead to endgame scenarios
+
+Result: An AI that either wins or forces a draw every game!
+
+## 🛠 Project Structure
+
+
+Codesoft/
+├── tic_tac_toe_backend.py  # Game logic and AI
+├── tic_tac_toe_frontend.py # Pygame interface
+└── README.md               # This file
+
+
+## 📚 Dependencies
+
+- Python 3.6+
+- Pygame 2.0+
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a new branch
+3. Submit a pull request
+
+## 📜 License
+
+MIT License - Feel free to use and modify this project
+
+---
+
+Developed by [Ayush Ghosh](https://github.com/ayush-ghosh-7)
