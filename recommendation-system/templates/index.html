@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMatch | Smart Movie Recommendations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --warning: #f72585;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .genre-selector {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .section-subtitle {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .genre-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .genre-card {
+            background: white;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .genre-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-light);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.1);
+        }
+
+        .genre-card.selected {
+            border-color: var(--primary);
+            background-color: #f0f7ff;
+        }
+
+        .genre-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .genre-name {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .star {
+            color: var(--light-gray);
+            cursor: pointer;
+            transition: color 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .star.active {
+            color: #ffc107;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 2rem auto 0;
+            padding: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .results {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .movie-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-poster {
+            height: 350px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .movie-score {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .movie-details {
+            padding: 1.5rem;
+        }
+
+        .movie-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .movie-name {
+            font-weight: 600;
+        }
+
+        .movie-year {
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .movie-genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .genre-tag {
+            background: var(--light-gray);
+            color: #495057;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .movie-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            grid-column: 1 / -1;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        .error-message {
+            color: var(--warning);
+            text-align: center;
+            padding: 2rem;
+            grid-column: 1 / -1;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            .genre-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .movie-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .movie-poster {
+                height: 250px;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .logo i {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-film"></i>
+                <h1>CineMatch</h1>
+            </div>
+            <p class="tagline">Discover your perfect movie match with AI-powered recommendations</p>
+        </header>
+
+        <section class="genre-selector">
+            <h2 class="section-title">What's your movie taste?</h2>
+            <p class="section-subtitle">Select your favorite genres and rate how much you enjoy them</p>
+            
+            <div class="genre-grid">
+                <!-- Action -->
+                <div class="genre-card" onclick="toggleGenre(this, 'Action')">
+                    <i class="fas fa-fist-raised genre-icon"></i>
+                    <h3 class="genre-name">Action</h3>
+                    <div class="rating-stars">
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Action', 1)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Action', 2)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Action', 3)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Action', 4)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Action', 5)"></i>
+                    </div>
+                </div>
+                
+                <!-- Comedy -->
+                <div class="genre-card" onclick="toggleGenre(this, 'Comedy')">
+                    <i class="fas fa-laugh-squint genre-icon"></i>
+                    <h3 class="genre-name">Comedy</h3>
+                    <div class="rating-stars">
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Comedy', 1)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Comedy', 2)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Comedy', 3)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Comedy', 4)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Comedy', 5)"></i>
+                    </div>
+                </div>
+                
+                <!-- Drama -->
+                <div class="genre-card" onclick="toggleGenre(this, 'Drama')">
+                    <i class="fas fa-theater-masks genre-icon"></i>
+                    <h3 class="genre-name">Drama</h3>
+                    <div class="rating-stars">
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Drama', 1)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Drama', 2)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Drama', 3)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Drama', 4)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Drama', 5)"></i>
+                    </div>
+                </div>
+                
+                <!-- Sci-Fi -->
+                <div class="genre-card" onclick="toggleGenre(this, 'Sci-Fi')">
+                    <i class="fas fa-robot genre-icon"></i>
+                    <h3 class="genre-name">Sci-Fi</h3>
+                    <div class="rating-stars">
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Sci-Fi', 1)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Sci-Fi', 2)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Sci-Fi', 3)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Sci-Fi', 4)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Sci-Fi', 5)"></i>
+                    </div>
+                </div>
+                
+                <!-- Horror -->
+                <div class="genre-card" onclick="toggleGenre(this, 'Horror')">
+                    <i class="fas fa-ghost genre-icon"></i>
+                    <h3 class="genre-name">Horror</h3>
+                    <div class="rating-stars">
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Horror', 1)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Horror', 2)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Horror', 3)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Horror', 4)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Horror', 5)"></i>
+                    </div>
+                </div>
+                
+                <!-- Romance -->
+                <div class="genre-card" onclick="toggleGenre(this, 'Romance')">
+                    <i class="fas fa-heart genre-icon"></i>
+                    <h3 class="genre-name">Romance</h3>
+                    <div class="rating-stars">
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Romance', 1)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Romance', 2)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Romance', 3)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Romance', 4)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Romance', 5)"></i>
+                    </div>
+                </div>
+                
+                <!-- Animation -->
+                <div class="genre-card" onclick="toggleGenre(this, 'Animation')">
+                    <i class="fas fa-film genre-icon"></i>
+                    <h3 class="genre-name">Animation</h3>
+                    <div class="rating-stars">
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Animation', 1)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Animation', 2)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Animation', 3)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Animation', 4)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Animation', 5)"></i>
+                    </div>
+                </div>
+                
+                <!-- Thriller -->
+                <div class="genre-card" onclick="toggleGenre(this, 'Thriller')">
+                    <i class="fas fa-user-secret genre-icon"></i>
+                    <h3 class="genre-name">Thriller</h3>
+                    <div class="rating-stars">
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Thriller', 1)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Thriller', 2)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Thriller', 3)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Thriller', 4)"></i>
+                        <i class="fas fa-star star" onclick="rateGenre(event, 'Thriller', 5)"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="getRecommendations()">
+                <i class="fas fa-search"></i> Find My Perfect Movies
+            </button>
+        </section>
+
+        <section class="results" id="results">
+            <div class="results-header">
+                <h2 class="results-title">Your Personalized Recommendations</h2>
+                <button class="btn btn-secondary" onclick="resetSelections()">
+                    <i class="fas fa-redo"></i> Start Over
+                </button>
+            </div>
+            
+            <div class="movie-grid" id="recommendations">
+                <!-- Recommendations will appear here -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Store user ratings
+        const userRatings = {};
+        
+        // Toggle genre selection
+        function toggleGenre(card, genre) {
+            card.classList.toggle('selected');
+            
+            if (!card.classList.contains('selected')) {
+                delete userRatings[genre];
+                resetStars(card);
+            } else if (!userRatings[genre]) {
+                userRatings[genre] = 3; // Default rating
+                updateStars(card, 3);
+            }
+        }
+        
+        // Rate a genre (1-5 stars)
+        function rateGenre(event, genre, rating) {
+            event.stopPropagation();
+            
+            const card = event.target.closest('.genre-card');
+            card.classList.add('selected');
+            userRatings[genre] = rating;
+            
+            updateStars(card, rating);
+        }
+        
+        // Update star display
+        function updateStars(card, rating) {
+            const stars = card.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                star.classList.toggle('active', index < rating);
+            });
+        }
+        
+        // Reset stars for a genre
+        function resetStars(card) {
+            const stars = card.querySelectorAll('.star');
+            stars.forEach(star => star.classList.remove('active'));
+        }
+        
+        // Get recommendations from server
+        function getRecommendations() {
+            if (Object.keys(userRatings).length === 0) {
+                alert('Please select and rate at least one genre');
+                return;
+            }
+            
+            const recommendationsDiv = document.getElementById('recommendations');
+            recommendationsDiv.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>Finding your perfect movie matches...</p>
+                </div>
+            `;
+            
+            document.getElementById('results').style.display = 'block';
+            
+            fetch('/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ratings: userRatings })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { 
+                        throw new Error(err.error || 'Network response was not ok'); 
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                displayRecommendations(data.recommendations);
+            })
+            .catch(error => {
+                recommendationsDiv.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>${error.message || 'Failed to get recommendations. Please try again.'}</p>
+                    </div>
+                `;
+            });
+        }
+        
+        // Display recommendations
+        function displayRecommendations(recommendations) {
+            const recommendationsDiv = document.getElementById('recommendations');
+            
+            if (!recommendations || recommendations.length === 0) {
+                recommendationsDiv.innerHTML = `
+                    <div class="error-message" style="color: var(--gray);">
+                        <i class="fas fa-film"></i>
+                        <p>No recommendations found. Try adjusting your ratings.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            recommendationsDiv.innerHTML = recommendations.map((movie, index) => `
+                <div class="movie-card fade-in" style="animation-delay: ${index * 0.1}s">
+                    <div class="movie-poster" style="background-image: url('${movie.poster}')">
+                        <div class="movie-score">${Math.round(movie.score * 20)}% Match</div>
+                    </div>
+                    <div class="movie-details">
+                        <div class="movie-title">
+                            <span class="movie-name">${movie.title}</span>
+                            <span class="movie-year">${movie.year}</span>
+                        </div>
+                        <div class="movie-genres">
+                            ${movie.genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('')}
+                        </div>
+                        <p class="movie-description">${movie.description}</p>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Smooth scroll to results
+            document.getElementById('results').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        // Reset all selections
+        function resetSelections() {
+            document.querySelectorAll('.genre-card').forEach(card => {
+                card.classList.remove('selected');
+                resetStars(card);
+            });
+            
+            for (const genre in userRatings) {
+                delete userRatings[genre];
+            }
+            
+            document.getElementById('results').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
