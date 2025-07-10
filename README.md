@@ -230,6 +230,6 @@ Open a Pull Request
 Distributed under the MIT License. See LICENSE for more information.
 
 📧 Contact
-Ayush Ghosh - your-email@example.com
+Ayush Ghosh - ghoshayush877@gmail.com
 
 Project Link: https://github.com/ayush-ghosh-7/Codesoft
