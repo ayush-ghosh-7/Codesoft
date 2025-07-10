@@ -186,3 +186,50 @@ MIT License - Feel free to use and modify this project
 ---
 
 Developed by [Ayush Ghosh](https://github.com/ayush-ghosh-7)
+
+# 🎬 CineMatch - Movie Recommendation System
+
+A Flask-based web application that suggests movies based on your genre preferences using a custom recommendation algorithm.
+
+## ✨ Features
+
+- Rate movie genres (1-5 stars)
+- AI-powered personalized recommendations
+- Beautiful UI with movie posters
+- Responsive design works on all devices
+- Dynamic genre selection interface
+
+## 🛠️ Technologies Used
+
+- **Backend**: Python, Flask
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Icons**: Font Awesome
+- **Styling**: Modern CSS with Flexbox/Grid
+
+Project Structure
+CineMatch/
+├── app.py               # Flask application
+├── templates/
+│   └── index.html       # Main template
+├── static/              # CSS/JS assets
+├── README.md            # This file
+└── requirements.txt     # Dependencies
+
+🤝 How to Contribute
+Fork the project
+
+Create your feature branch (git checkout -b feature/AmazingFeature)
+
+Commit your changes (git commit -m 'Add some amazing feature')
+
+Push to the branch (git push origin feature/AmazingFeature)
+
+Open a Pull Request
+
+📄 License
+Distributed under the MIT License. See LICENSE for more information.
+
+📧 Contact
+Ayush Ghosh - your-email@example.com
+
+Project Link: https://github.com/ayush-ghosh-7/Codesoft
