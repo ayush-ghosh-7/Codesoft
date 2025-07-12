@@ -232,4 +232,7 @@ Distributed under the MIT License. See LICENSE for more information.
 📧 Contact
 Ayush Ghosh - ghoshayush877@gmail.com
 
-Project Link: https://github.com/ayush-ghosh-7/Codesoft
+LIVE DEMO LINK OF ALL PROJECTS
+  1. https://ayushghosh7.pythonanywhere.com/
+  2. https://ron7.pythonanywhere.com/
+  3. https://ghoshron.pythonanywhere.com/
